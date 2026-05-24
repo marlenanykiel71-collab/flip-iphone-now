@@ -72,20 +72,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "FlipPhone — Wycena iPhone" },
+      { name: "description", content: "Sprawdź wycenę swojego iPhone w 30 sekund. Premium skup iPhone od modelu X po 17 Pro Max." },
+      { name: "theme-color", content: "#0a0a14" },
+      { property: "og:site_name", content: "FlipPhone" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2360a5fa'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%230a0a14'/%3E%3Crect x='20' y='12' width='24' height='40' rx='6' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='32' cy='46' r='2' fill='url(%23g)'/%3E%3C/svg%3E" },
     ],
   }),
   shellComponent: RootShell,
@@ -96,8 +92,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pl" className="dark">
       <head>
+
         <HeadContent />
       </head>
       <body>
