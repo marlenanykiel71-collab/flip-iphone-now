@@ -28,26 +28,42 @@ jobs:
       - name: Build static SPA
         run: npm run build
 
-      - name: Locate build output
+      - name: Prepare publish directory
         id: out
         run: |
-          if [ -d ".output/public" ]; then
-            echo "dir=.output/public" >> $GITHUB_OUTPUT
-          elif [ -d "dist" ]; then
-            echo "dir=dist" >> $GITHUB_OUTPUT
-          else
-            echo "No build output found"; ls -la; exit 1
+          SRC=""
+          for d in dist/client .output/public dist; do
+            if [ -d "$d" ]; then SRC="$d"; break; fi
+          done
+          if [ -z "$SRC" ]; then echo "No build output"; ls -la; exit 1; fi
+          echo "Using build output: $SRC"
+
+          PUB="publish"
+          rm -rf "$PUB"
+          mkdir -p "$PUB"
+          cp -r "$SRC"/. "$PUB"/
+
+          # Ensure index.html at root (TanStack Start emits _shell.html as SPA shell)
+          if [ ! -f "$PUB/index.html" ] && [ -f "$PUB/_shell.html" ]; then
+            mv "$PUB/_shell.html" "$PUB/index.html"
           fi
 
-      - name: Ensure GitHub Pages helper files
-        run: |
-          DIR="${{ steps.out.outputs.dir }}"
-          touch "$DIR/.nojekyll"
-          [ -f "$DIR/robots.txt" ] || cp public/robots.txt "$DIR/robots.txt"
-          [ -f "$DIR/favicon.ico" ] || cp public/favicon.ico "$DIR/favicon.ico"
-          [ -f "$DIR/og-image.png" ] || cp public/og-image.png "$DIR/og-image.png"
-          [ -f "$DIR/placeholder.svg" ] || cp public/placeholder.svg "$DIR/placeholder.svg"
-          ls -la "$DIR"
+          # Fix broken "/./assets/" paths → "./assets/" for relative hosting
+          if [ -f "$PUB/index.html" ]; then
+            sed -i 's|/\./assets/|./assets/|g' "$PUB/index.html"
+          fi
+
+          # GitHub Pages helper + required root files
+          touch "$PUB/.nojekyll"
+          for f in robots.txt favicon.ico og-image.png placeholder.svg; do
+            [ -f "$PUB/$f" ] || cp "public/$f" "$PUB/$f" 2>/dev/null || true
+          done
+
+          # Remove any leftover shell file
+          rm -f "$PUB/_shell.html"
+
+          echo "dir=$PUB" >> $GITHUB_OUTPUT
+          ls -la "$PUB"
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
