@@ -29,6 +29,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const [open, setOpen] = useState(false);
+  const [repairOpen, setRepairOpen] = useState(false);
   return (
     <div className="min-h-screen relative overflow-x-hidden">
       <Toaster theme="dark" position="top-center" />
@@ -36,12 +37,14 @@ function Home() {
       <Nav onQuote={() => setOpen(true)} />
       <Hero onQuote={() => setOpen(true)} />
       <Features />
+      <Repair onRepair={() => setRepairOpen(true)} />
       <Ebook />
       <Discord />
       <Testimonials />
       <FAQ />
       <Footer />
       <QuoteForm open={open} onOpenChange={setOpen} />
+      <RepairForm open={repairOpen} onOpenChange={setRepairOpen} />
     </div>
   );
 }
