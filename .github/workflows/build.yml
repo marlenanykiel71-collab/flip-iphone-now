@@ -1,9 +1,13 @@
-name: Build Automatically
+name: Deploy static build to GitHub Pages
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build-deploy:
@@ -21,11 +25,35 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build the project
+      - name: Build static SPA
         run: npm run build
 
-      - name: Deploy to GitHub Pages
+      - name: Locate build output
+        id: out
+        run: |
+          if [ -d ".output/public" ]; then
+            echo "dir=.output/public" >> $GITHUB_OUTPUT
+          elif [ -d "dist" ]; then
+            echo "dir=dist" >> $GITHUB_OUTPUT
+          else
+            echo "No build output found"; ls -la; exit 1
+          fi
+
+      - name: Ensure GitHub Pages helper files
+        run: |
+          DIR="${{ steps.out.outputs.dir }}"
+          touch "$DIR/.nojekyll"
+          [ -f "$DIR/robots.txt" ] || cp public/robots.txt "$DIR/robots.txt"
+          [ -f "$DIR/favicon.ico" ] || cp public/favicon.ico "$DIR/favicon.ico"
+          [ -f "$DIR/og-image.png" ] || cp public/og-image.png "$DIR/og-image.png"
+          [ -f "$DIR/placeholder.svg" ] || cp public/placeholder.svg "$DIR/placeholder.svg"
+          ls -la "$DIR"
+
+      - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_branch: gh-pages
+          publish_dir: ${{ steps.out.outputs.dir }}
+          force_orphan: true
+          commit_message: "Deploy static build"
