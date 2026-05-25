@@ -172,7 +172,55 @@ function Features() {
   );
 }
 
+function Repair({ onRepair }: { onRepair: () => void }) {
+  return (
+    <section id="repair" className="px-4 py-24">
+      <div className="mx-auto max-w-6xl glass rounded-[2rem] p-8 md:p-14 grid md:grid-cols-2 gap-12 items-center overflow-hidden relative">
+        <div
+          aria-hidden
+          className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full opacity-50"
+          style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 200 / 0.5), transparent)" }}
+        />
+        <div className="relative">
+          <div className="inline-flex items-center gap-2 text-xs text-primary">
+            <Wrench className="h-4 w-4" /> NAPRAWA
+          </div>
+          <h2 className="mt-3 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
+            Naprawa Twojego iPhone
+          </h2>
+          <p className="mt-4 text-muted-foreground max-w-md">
+            Pęknięty ekran, problem z baterią, zalanie? Wybierz model, opisz uszkodzenie — wycenimy naprawę.
+          </p>
+          <button
+            onClick={onRepair}
+            className="btn-premium btn-premium-hover mt-7 inline-flex items-center gap-2 rounded-full px-7 py-4 font-semibold"
+          >
+            Zgłoś naprawę <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="relative grid grid-cols-2 gap-4">
+          {[
+            { t: "Wymiana ekranu", d: "Oryginalne części" },
+            { t: "Wymiana baterii", d: "100% kondycji" },
+            { t: "Po zalaniu", d: "Czyszczenie i diagnoza" },
+            { t: "Inne usterki", d: "Głośnik, kamera, port" },
+          ].map((it) => (
+            <div key={it.t} className="glass rounded-2xl p-5">
+              <div className="h-10 w-10 rounded-xl btn-premium grid place-items-center">
+                <Wrench className="h-4 w-4" />
+              </div>
+              <h3 className="mt-3 font-semibold">{it.t}</h3>
+              <p className="text-xs text-muted-foreground mt-1">{it.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Ebook() {
+
   return (
     <section id="ebook" className="px-4 py-24">
       <div className="mx-auto max-w-6xl glass rounded-[2rem] p-8 md:p-14 grid md:grid-cols-2 gap-12 items-center overflow-hidden relative">
