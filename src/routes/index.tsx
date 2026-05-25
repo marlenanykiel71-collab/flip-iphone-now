@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { QuoteForm } from "@/components/QuoteForm";
 import heroIphone from "@/assets/hero-iphone.jpg";
-import ebookMockup from "@/assets/ebook-mockup.png";
+import ebookMockup from "@/assets/ebook-cover.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -191,7 +191,7 @@ function Ebook() {
             target="_blank" rel="noopener noreferrer"
             className="btn-premium btn-premium-hover mt-7 inline-flex items-center gap-2 rounded-full px-7 py-4 font-semibold"
           >
-            Pobierz ebook <ArrowRight className="h-4 w-4" />
+            Zakup ebook <ArrowRight className="h-4 w-4" />
           </a>
         </div>
         <div className="relative">
