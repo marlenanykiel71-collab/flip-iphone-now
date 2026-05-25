@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight } from "lucide-react";
+import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Accordion,
@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { QuoteForm } from "@/components/QuoteForm";
+import { RepairForm } from "@/components/RepairForm";
 import heroIphone from "@/assets/hero-iphone.jpg";
 import ebookMockup from "@/assets/ebook-cover.png";
 
