@@ -58,13 +58,16 @@ const initial: FormState = {
 export function QuoteForm({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const [form, setForm] = useState<FormState>(initial);
   const [loading, setLoading] = useState(false);
+  const [fallbackOpen, setFallbackOpen] = useState(false);
+  const [mailData, setMailData] = useState<{ subject: string; body: string }>({ subject: "", body: "" });
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => setForm((f) => ({ ...f, [k]: v }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
+    const subject = "Nowa wycena iPhone";
     const body =
 `Nowa wycena iPhone
 
@@ -87,20 +90,34 @@ Dodatkowe informacje:
 ${form.notes || "—"}
 `;
 
-    const mailto = `mailto:flipperiphone7@gmail.com?subject=${encodeURIComponent("Nowa wycena iPhone")}&body=${encodeURIComponent(body)}`;
+    // Auto-copy to clipboard
+    try {
+      await navigator.clipboard.writeText(`Do: flipperiphone7@gmail.com\nTemat: ${subject}\n\n${body}`);
+    } catch {}
 
-    setTimeout(() => {
-      window.location.href = mailto;
-      setLoading(false);
-      toast("Sprawdź aplikację pocztową aby wysłać formularz.", {
-        description: "Otworzyliśmy okno emaila z gotową wiadomością.",
+    const mailto = `mailto:flipperiphone7@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    // Try to open mailto
+    window.location.href = mailto;
+
+    setLoading(false);
+
+    if (isDesktop()) {
+      // On desktop show fallback modal (mail client may not be configured)
+      setMailData({ subject, body });
+      onOpenChange(false);
+      setTimeout(() => setFallbackOpen(true), 300);
+    } else {
+      toast("Otwieramy aplikację pocztową", {
+        description: "Wiadomość została też skopiowana do schowka.",
       });
       onOpenChange(false);
-      setForm(initial);
-    }, 900);
+    }
+    setForm(initial);
   };
 
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="glass max-w-2xl max-h-[90vh] overflow-y-auto border-white/10">
         <DialogHeader>
