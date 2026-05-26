@@ -74,6 +74,7 @@ function Nav({ onQuote }: { onQuote: () => void }) {
         <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
           <a href="#features" className="hover:text-foreground transition">Dlaczego my</a>
           <a href="#repair" className="hover:text-foreground transition">Naprawa</a>
+          <a href="#marketplace" className="hover:text-foreground transition">iPhone&apos;y</a>
           <a href="#ebook" className="hover:text-foreground transition">Ebook</a>
           <a href="#discord" className="hover:text-foreground transition">Społeczność</a>
           <a href="#faq" className="hover:text-foreground transition">FAQ</a>
