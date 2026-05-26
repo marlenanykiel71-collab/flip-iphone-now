@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { MailFallbackDialog, isDesktop } from "@/components/MailFallbackDialog";
 
 const IPHONE_MODELS = [
   "iPhone X", "iPhone XR", "iPhone XS", "iPhone XS Max",
