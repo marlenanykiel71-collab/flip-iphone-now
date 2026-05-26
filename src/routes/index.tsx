@@ -38,6 +38,7 @@ function Home() {
       <Hero onQuote={() => setOpen(true)} />
       <Features />
       <Repair onRepair={() => setRepairOpen(true)} />
+      <Marketplace />
       <Ebook />
       <Discord />
       <Testimonials />
