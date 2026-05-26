@@ -150,6 +150,8 @@ ${form.notes || "—"}
         </form>
       </DialogContent>
     </Dialog>
+    <MailFallbackDialog open={fallbackOpen} onOpenChange={setFallbackOpen} subject={mailData.subject} body={mailData.body} />
+    </>
   );
 }
 
