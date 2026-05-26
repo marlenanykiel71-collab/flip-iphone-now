@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench } from "lucide-react";
+import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench, Store, Tag, CheckCircle2 } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Accordion,
@@ -38,6 +38,7 @@ function Home() {
       <Hero onQuote={() => setOpen(true)} />
       <Features />
       <Repair onRepair={() => setRepairOpen(true)} />
+      <Marketplace />
       <Ebook />
       <Discord />
       <Testimonials />
@@ -73,6 +74,7 @@ function Nav({ onQuote }: { onQuote: () => void }) {
         <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
           <a href="#features" className="hover:text-foreground transition">Dlaczego my</a>
           <a href="#repair" className="hover:text-foreground transition">Naprawa</a>
+          <a href="#marketplace" className="hover:text-foreground transition">iPhone&apos;y</a>
           <a href="#ebook" className="hover:text-foreground transition">Ebook</a>
           <a href="#discord" className="hover:text-foreground transition">Społeczność</a>
           <a href="#faq" className="hover:text-foreground transition">FAQ</a>
@@ -213,6 +215,86 @@ function Repair({ onRepair }: { onRepair: () => void }) {
               <p className="text-xs text-muted-foreground mt-1">{it.d}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Marketplace() {
+  const perks = [
+    "Sprawdzone urządzenia",
+    "Pełna historia telefonu",
+    "Gwarancja sprzedawcy",
+  ];
+  return (
+    <section id="marketplace" className="px-4 py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="text-center mb-14">
+          <div className="glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted-foreground">
+            <Store className="h-3.5 w-3.5 text-primary" />
+            MARKETPLACE
+          </div>
+          <h2 className="mt-5 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
+            Sprawdź dostępne iPhone&apos;y
+          </h2>
+          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
+            Zobacz aktualnie dostępne urządzenia wystawione na sprzedaż.
+          </p>
+        </div>
+
+        <div className="relative group max-w-3xl mx-auto">
+          <div
+            aria-hidden
+            className="absolute -inset-px rounded-[2rem] opacity-70 group-hover:opacity-100 transition duration-700 blur-sm"
+            style={{ background: "linear-gradient(135deg, oklch(0.6 0.22 235 / 0.6), oklch(0.6 0.22 280 / 0.5), oklch(0.6 0.22 200 / 0.6))" }}
+          />
+          <div className="relative glass rounded-[2rem] p-8 md:p-12 overflow-hidden">
+            <div
+              aria-hidden
+              className="absolute -top-24 -right-24 h-72 w-72 rounded-full opacity-50"
+              style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 235 / 0.5), transparent)" }}
+            />
+            <div className="relative grid md:grid-cols-[auto_1fr_auto] gap-8 items-center">
+              <div className="relative mx-auto md:mx-0">
+                <div
+                  aria-hidden
+                  className="absolute inset-0 blur-2xl opacity-70"
+                  style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 235 / 0.6), transparent)" }}
+                />
+                <div className="relative h-24 w-24 md:h-28 md:w-28 rounded-3xl btn-premium grid place-items-center group-hover:scale-105 transition duration-500">
+                  <Smartphone className="h-12 w-12" />
+                </div>
+              </div>
+
+              <div className="text-center md:text-left">
+                <div className="inline-flex items-center gap-2 text-xs text-primary mb-2">
+                  <Tag className="h-3.5 w-3.5" /> AKTUALNE OFERTY
+                </div>
+                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                  iPhone&apos;y w świetnych cenach
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground max-w-md">
+                  Wszystkie modele od iPhone X po iPhone 17 Pro Max — gotowe do wysyłki.
+                </p>
+                <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2">
+                  {perks.map((p) => (
+                    <div key={p} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-primary" /> {p}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <a
+                href="https://www.olx.pl/oferty/user/2568Rr/"
+                target="_blank" rel="noopener noreferrer"
+                className="btn-premium btn-premium-hover rounded-full px-7 py-4 font-semibold inline-flex items-center gap-2 whitespace-nowrap"
+              >
+                Zobacz oferty <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
