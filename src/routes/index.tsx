@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench, Store, Tag, CheckCircle2 } from "lucide-react";
+import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench, Store, Tag, CheckCircle2, Puzzle } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Accordion,
@@ -39,6 +39,7 @@ function Home() {
       <Features />
       <Repair onRepair={() => setRepairOpen(true)} />
       <Marketplace />
+      <OlxPlugin />
       <Ebook />
       <Discord />
       <Testimonials />
@@ -75,6 +76,7 @@ function Nav({ onQuote }: { onQuote: () => void }) {
           <a href="#features" className="hover:text-foreground transition">Dlaczego my</a>
           <a href="#repair" className="hover:text-foreground transition">Naprawa</a>
           <a href="#marketplace" className="hover:text-foreground transition">iPhone&apos;y</a>
+          <a href="#wtyczka" className="hover:text-foreground transition">Wtyczka OLX</a>
           <a href="#ebook" className="hover:text-foreground transition">Ebook</a>
           <a href="#discord" className="hover:text-foreground transition">Społeczność</a>
           <a href="#faq" className="hover:text-foreground transition">FAQ</a>
@@ -301,6 +303,72 @@ function Marketplace() {
   );
 }
 
+function OlxPlugin() {
+  return (
+    <section id="wtyczka" className="px-4 py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="text-center mb-14">
+          <div className="glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted-foreground">
+            <Puzzle className="h-3.5 w-3.5 text-primary" />
+            WTYCZKA OLX
+          </div>
+          <h2 className="mt-5 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
+            Sprzedawaj na OLX szybciej
+          </h2>
+          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
+            Mniej klikania, więcej sprzedanych sztuk. Narzędzie dla osób, które wystawiają telefony na OLX.
+          </p>
+        </div>
+
+        <div className="relative group max-w-4xl mx-auto">
+          <div
+            aria-hidden
+            className="absolute -inset-px rounded-[2rem] opacity-70 group-hover:opacity-100 transition duration-700 blur-sm"
+            style={{ background: "linear-gradient(135deg, oklch(0.6 0.22 150 / 0.5), oklch(0.6 0.22 235 / 0.6), oklch(0.6 0.22 280 / 0.5))" }}
+          />
+          <div className="relative glass rounded-[2rem] p-8 md:p-12 overflow-hidden">
+            <div
+              aria-hidden
+              className="absolute -top-24 -left-24 h-72 w-72 rounded-full opacity-40"
+              style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 150 / 0.5), transparent)" }}
+            />
+            <div className="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 text-xs text-primary mb-2">
+                  <Puzzle className="h-3.5 w-3.5" /> NARZĘDZIE DLA SPRZEDAWCÓW
+                </div>
+                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                  Wtyczka OLX
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground max-w-md">
+                  Wystawiasz, odpisujesz, sprzedajesz — a wtyczka skraca drogę do kasy. Zamiast klikać w dziesiątki zakładek, ogarniasz oferty z jednego miejsca.
+                </p>
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <div className="glass rounded-full px-4 py-2 text-sm">
+                    <span className="line-through text-muted-foreground">79 zł</span>{" "}
+                    <span className="font-semibold text-foreground">49 zł</span>
+                  </div>
+                  <div className="glass rounded-full px-4 py-2 text-xs text-muted-foreground">
+                    Premiera • zostało 10 sztuk w promocji
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="https://www.naffy.io/sell/wtyczka-olx-fy2"
+                target="_blank" rel="noopener noreferrer"
+                className="btn-premium btn-premium-hover rounded-full px-7 py-4 font-semibold inline-flex items-center gap-2 whitespace-nowrap"
+              >
+                Zobacz wtyczkę <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Ebook() {
 
   return (
@@ -322,7 +390,7 @@ function Ebook() {
             Konkret, nie teoria. Ebook pełen wiedzy — Twój wybór, czy zaczniesz zarabiać na iPhone&apos;ach, czy dalej będziesz patrzeć, jak robią to inni.
           </p>
           <a
-            href="https://www.naffy.io/opiekunbezpaniki/flipiphone"
+            href="https://www.naffy.io/sell/flipiphone"
             target="_blank" rel="noopener noreferrer"
             className="btn-premium btn-premium-hover mt-7 inline-flex items-center gap-2 rounded-full px-7 py-4 font-semibold"
           >
