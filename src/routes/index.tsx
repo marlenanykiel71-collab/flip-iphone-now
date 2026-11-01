@@ -319,10 +319,10 @@ function Ebook() {
             Ebook o flipowaniu iPhone
           </h2>
           <p className="mt-4 text-muted-foreground max-w-md">
-            Dowiedz się jak zarabiać na kupowaniu i sprzedawaniu iPhone.
+            Konkret, nie teoria. Ebook pełen wiedzy — Twój wybór, czy zaczniesz zarabiać na iPhone&apos;ach, czy dalej będziesz patrzeć, jak robią to inni.
           </p>
           <a
-            href="https://www.naffy.io/iphone/flipiphone"
+            href="https://www.naffy.io/opiekunbezpaniki/flipiphone"
             target="_blank" rel="noopener noreferrer"
             className="btn-premium btn-premium-hover mt-7 inline-flex items-center gap-2 rounded-full px-7 py-4 font-semibold"
           >
