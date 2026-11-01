@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench, Store, Tag, CheckCircle2 } from "lucide-react";
+import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench, Store, Tag, CheckCircle2, Puzzle } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Accordion,
@@ -39,6 +39,7 @@ function Home() {
       <Features />
       <Repair onRepair={() => setRepairOpen(true)} />
       <Marketplace />
+      <OlxPlugin />
       <Ebook />
       <Discord />
       <Testimonials />
@@ -75,6 +76,7 @@ function Nav({ onQuote }: { onQuote: () => void }) {
           <a href="#features" className="hover:text-foreground transition">Dlaczego my</a>
           <a href="#repair" className="hover:text-foreground transition">Naprawa</a>
           <a href="#marketplace" className="hover:text-foreground transition">iPhone&apos;y</a>
+          <a href="#wtyczka" className="hover:text-foreground transition">Wtyczka OLX</a>
           <a href="#ebook" className="hover:text-foreground transition">Ebook</a>
           <a href="#discord" className="hover:text-foreground transition">Społeczność</a>
           <a href="#faq" className="hover:text-foreground transition">FAQ</a>
@@ -322,7 +324,7 @@ function Ebook() {
             Konkret, nie teoria. Ebook pełen wiedzy — Twój wybór, czy zaczniesz zarabiać na iPhone&apos;ach, czy dalej będziesz patrzeć, jak robią to inni.
           </p>
           <a
-            href="https://www.naffy.io/opiekunbezpaniki/flipiphone"
+            href="https://www.naffy.io/sell/flipiphone"
             target="_blank" rel="noopener noreferrer"
             className="btn-premium btn-premium-hover mt-7 inline-flex items-center gap-2 rounded-full px-7 py-4 font-semibold"
           >
