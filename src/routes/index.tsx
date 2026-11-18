@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench, Store, Tag, CheckCircle2, Puzzle } from "lucide-react";
+import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench, Store, Tag, CheckCircle2, Puzzle, Table2, MapPinned } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Accordion,
@@ -11,7 +11,11 @@ import {
 import { QuoteForm } from "@/components/QuoteForm";
 import { RepairForm } from "@/components/RepairForm";
 import heroIphone from "@/assets/hero-iphone.jpg";
-import ebookMockup from "@/assets/ebook-cover.png";
+import flipEbookCover from "@/assets/okladka-flip-iphone.jpg.asset.json";
+import olxPluginCover from "@/assets/okladka-wtyczka-olx.jpg.asset.json";
+import vintedPluginCover from "@/assets/okladka-wtyczka-vinted.jpg.asset.json";
+import olxPolandCover from "@/assets/okladka-tabelki-polska.png.asset.json";
+import olxRegionsCover from "@/assets/okladka-tabelki-wojewodztwa.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,6 +25,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "FlipPhone — Wycena iPhone" },
       { property: "og:description", content: "Indywidualna wycena Twojego iPhone w 30 sekund." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
@@ -39,8 +44,7 @@ function Home() {
       <Features />
       <Repair onRepair={() => setRepairOpen(true)} />
       <Marketplace />
-      <OlxPlugin />
-      <Ebook />
+      <Products />
       <Discord />
       <Testimonials />
       <FAQ />
@@ -76,8 +80,7 @@ function Nav({ onQuote }: { onQuote: () => void }) {
           <a href="#features" className="hover:text-foreground transition">Dlaczego my</a>
           <a href="#repair" className="hover:text-foreground transition">Naprawa</a>
           <a href="#marketplace" className="hover:text-foreground transition">iPhone&apos;y</a>
-          <a href="#wtyczka" className="hover:text-foreground transition">Wtyczka OLX</a>
-          <a href="#ebook" className="hover:text-foreground transition">Ebook</a>
+          <a href="#oferty" className="hover:text-foreground transition">Oferty</a>
           <a href="#discord" className="hover:text-foreground transition">Społeczność</a>
           <a href="#faq" className="hover:text-foreground transition">FAQ</a>
         </nav>
@@ -303,108 +306,116 @@ function Marketplace() {
   );
 }
 
-function OlxPlugin() {
+function Products() {
+  const products = [
+    {
+      image: flipEbookCover,
+      icon: BookOpen,
+      category: "EBOOK • PRAKTYCZNY PORADNIK",
+      title: "Flip iPhone’ów",
+      description: "Poznaj proces kupna, sprawdzania i sprzedaży iPhone’ów na OLX i Vinted. Konkretna wiedza, checklisty i prawdziwe przykłady flipów.",
+      href: "https://www.naffy.io/iphone-flipper/flip-iphoneow-od-300-zl-zysku-na-jednym-telefonie-e-book-o-kupowaniu-i-sprzedazy-na-olx-i-vinted-hbn",
+      cta: "Zobacz ebook",
+      alt: "Okładka ebooka Flip iPhone’ów — od 300 zł zysku na jednym telefonie",
+    },
+    {
+      image: olxPluginCover,
+      icon: Puzzle,
+      category: "WTYCZKA DO CHROME I OPERY",
+      title: "Wtyczka OLX",
+      description: "Wyceniaj telefony według własnego cennika i wysyłaj sprzedającym gotową wiadomość ze swoją ceną — jednym kliknięciem.",
+      href: "https://www.naffy.io/iphone-flipper/wtyczka-olx-iphone-oferta-wysylaj-sprzedajacym-swoja-cene-jednym-kliknieciem-gqc",
+      cta: "Sprawdź wtyczkę",
+      alt: "Okładka wtyczki OLX — wiadomości do sprzedających jednym kliknięciem",
+    },
+    {
+      image: vintedPluginCover,
+      icon: Puzzle,
+      category: "WTYCZKA DO CHROME I OPERY",
+      title: "Wtyczka Vinted",
+      description: "Składaj oferty i wysyłaj wiadomości do sprzedających jednym kliknięciem, z wyceną iPhone’a opartą na Twoim cenniku skupu.",
+      href: "https://www.naffy.io/iphone-flipper/wtyczka-vinted-iphone-oferta-skladaj-oferty-i-wysylaj-wiadomosci-do-sprzedajacych-jednym-kliknieci-lfd",
+      cta: "Sprawdź wtyczkę",
+      alt: "Okładka wtyczki Vinted — oferty na iPhone’y jednym kliknięciem",
+    },
+    {
+      image: olxPolandCover,
+      icon: Table2,
+      category: "CENY Z CAŁEJ POLSKI",
+      title: "Ceny OLX Polska",
+      description: "Realne ceny iPhone’ów z najnowszych ogłoszeń z całej Polski w jednej tabeli. Sprawdzaj cenę rynkową i szybką cenę bez zgadywania.",
+      href: "https://www.naffy.io/iphone-flipper/ceny-olx-polska-tabelka-realnych-cen-iphoneow-z-olx-w-jednym-kliknieciu-zd3",
+      cta: "Sprawdź ceny",
+      alt: "Okładka tabelki Ceny OLX Polska — ceny iPhone’ów z OLX w jednej tabeli",
+    },
+    {
+      image: olxRegionsCover,
+      icon: MapPinned,
+      category: "CAŁA POLSKA I 16 WOJEWÓDZTW",
+      title: "Ceny OLX Województwa",
+      description: "Porównuj realne ceny w całej Polsce i 16 województwach. Sprawdzaj, gdzie kupić taniej, a gdzie sprzedać drożej.",
+      href: "https://www.naffy.io/iphone-flipper/ceny-olx-wojewodztwa-realne-ceny-iphoneow-z-olx-dla-calej-polski-i-16-wojewodztw-nlj",
+      cta: "Sprawdź regiony",
+      alt: "Okładka tabelki Ceny OLX Województwa — realne ceny iPhone’ów dla całej Polski i 16 województw",
+    },
+  ];
+
   return (
-    <section id="wtyczka" className="px-4 py-24">
+    <section id="oferty" className="px-4 py-24">
       <div className="mx-auto max-w-6xl">
         <div className="text-center mb-14">
           <div className="glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted-foreground">
-            <Puzzle className="h-3.5 w-3.5 text-primary" />
-            WTYCZKA OLX
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            OFERTY FLIPPHONE
           </div>
           <h2 className="mt-5 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
-            Sprzedawaj na OLX szybciej
+            Flipuj mądrzej, nie ciężej
           </h2>
-          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-            Mniej klikania, więcej sprzedanych sztuk. Narzędzie dla osób, które wystawiają telefony na OLX.
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+            Praktyczna wiedza i narzędzia, które pomogą Ci szybciej znajdować okazje, sprawdzać ceny i składać oferty.
           </p>
         </div>
 
-        <div className="relative group max-w-4xl mx-auto">
-          <div
-            aria-hidden
-            className="absolute -inset-px rounded-[2rem] opacity-70 group-hover:opacity-100 transition duration-700 blur-sm"
-            style={{ background: "linear-gradient(135deg, oklch(0.6 0.22 150 / 0.5), oklch(0.6 0.22 235 / 0.6), oklch(0.6 0.22 280 / 0.5))" }}
-          />
-          <div className="relative glass rounded-[2rem] p-8 md:p-12 overflow-hidden">
-            <div
-              aria-hidden
-              className="absolute -top-24 -left-24 h-72 w-72 rounded-full opacity-40"
-              style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 150 / 0.5), transparent)" }}
-            />
-            <div className="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 text-xs text-primary mb-2">
-                  <Puzzle className="h-3.5 w-3.5" /> NARZĘDZIE DLA SPRZEDAWCÓW
-                </div>
-                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                  Wtyczka OLX
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground max-w-md">
-                  Wystawiasz, odpisujesz, sprzedajesz — a wtyczka skraca drogę do kasy. Zamiast klikać w dziesiątki zakładek, ogarniasz oferty z jednego miejsca.
-                </p>
-                <div className="mt-5 flex flex-wrap items-center gap-3">
-                  <div className="glass rounded-full px-4 py-2 text-sm">
-                    <span className="line-through text-muted-foreground">79 zł</span>{" "}
-                    <span className="font-semibold text-foreground">49 zł</span>
-                  </div>
-                  <div className="glass rounded-full px-4 py-2 text-xs text-muted-foreground">
-                    Premiera • zostało 10 sztuk w promocji
-                  </div>
-                </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-6 items-stretch">
+          {products.map((product, index) => (
+            <article
+              key={product.title}
+              className={`group glass relative flex h-full flex-col overflow-hidden rounded-[1.75rem] transition duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10 ${
+                index < 3
+                  ? "lg:col-span-2"
+                  : index === 3
+                    ? "lg:col-span-2 lg:col-start-2"
+                    : "lg:col-span-2 lg:col-start-4"
+              }`}
+            >
+              <div className="relative overflow-hidden border-b border-border/50">
+                <img
+                  src={product.image.url}
+                  alt={product.alt}
+                  loading="lazy"
+                  width={1520}
+                  height={2000}
+                  className="aspect-[19/25] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                />
               </div>
-
-              <a
-                href="https://www.naffy.io/sell/wtyczka-olx-fy2"
-                target="_blank" rel="noopener noreferrer"
-                className="btn-premium btn-premium-hover rounded-full px-7 py-4 font-semibold inline-flex items-center gap-2 whitespace-nowrap"
-              >
-                Zobacz wtyczkę <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Ebook() {
-
-  return (
-    <section id="ebook" className="px-4 py-24">
-      <div className="mx-auto max-w-6xl glass rounded-[2rem] p-8 md:p-14 grid md:grid-cols-2 gap-12 items-center overflow-hidden relative">
-        <div
-          aria-hidden
-          className="absolute -top-20 -left-20 h-72 w-72 rounded-full opacity-50"
-          style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 235 / 0.6), transparent)" }}
-        />
-        <div className="relative">
-          <div className="inline-flex items-center gap-2 text-xs text-primary">
-            <BookOpen className="h-4 w-4" /> EBOOK
-          </div>
-          <h2 className="mt-3 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
-            Ebook o flipowaniu iPhone
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-md">
-            Konkret, nie teoria. Ebook pełen wiedzy — Twój wybór, czy zaczniesz zarabiać na iPhone&apos;ach, czy dalej będziesz patrzeć, jak robią to inni.
-          </p>
-          <a
-            href="https://www.naffy.io/sell/flipiphone"
-            target="_blank" rel="noopener noreferrer"
-            className="btn-premium btn-premium-hover mt-7 inline-flex items-center gap-2 rounded-full px-7 py-4 font-semibold"
-          >
-            Zakup ebook <ArrowRight className="h-4 w-4" />
-          </a>
-        </div>
-        <div className="relative">
-          <img
-            src={ebookMockup}
-            alt="Ebook iPhone Flipping mockup"
-            loading="lazy" width={1024} height={1024}
-            className="w-full max-w-sm mx-auto animate-float"
-            style={{ filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.7))" }}
-          />
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex items-center gap-2 text-[11px] font-medium tracking-wide text-primary">
+                  <product.icon className="h-3.5 w-3.5 shrink-0" />
+                  {product.category}
+                </div>
+                <h3 className="mt-3 text-2xl font-semibold tracking-tight">{product.title}</h3>
+                <p className="mb-6 mt-3 text-sm leading-relaxed text-muted-foreground">{product.description}</p>
+                <a
+                  href={product.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-premium btn-premium-hover mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 font-semibold transition group-hover:gap-3"
+                >
+                  {product.cta} <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -519,7 +530,7 @@ function Footer() {
         </div>
         <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
           <a href="#features" className="hover:text-foreground transition">Dlaczego my</a>
-          <a href="#ebook" className="hover:text-foreground transition">Ebook</a>
+          <a href="#oferty" className="hover:text-foreground transition">Oferty</a>
           <a href="#discord" className="hover:text-foreground transition">Discord</a>
           <a href="#faq" className="hover:text-foreground transition">FAQ</a>
           <a href="mailto:flipperiphone7@gmail.com" className="hover:text-foreground transition">Kontakt</a>
