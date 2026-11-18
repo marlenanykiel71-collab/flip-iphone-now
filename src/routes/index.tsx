@@ -11,11 +11,11 @@ import {
 import { QuoteForm } from "@/components/QuoteForm";
 import { RepairForm } from "@/components/RepairForm";
 import heroIphone from "@/assets/hero-iphone.jpg";
-import flipEbookCover from "@/assets/okladka-flip-iphone.jpg.asset.json";
-import olxPluginCover from "@/assets/okladka-wtyczka-olx.jpg.asset.json";
-import vintedPluginCover from "@/assets/okladka-wtyczka-vinted.jpg.asset.json";
-import olxPolandCover from "@/assets/okladka-tabelki-polska.png.asset.json";
-import olxRegionsCover from "@/assets/okladka-tabelki-wojewodztwa.jpg.asset.json";
+import flipEbookCover from "@/assets/okladka-flip-iphone.jpg";
+import olxPluginCover from "@/assets/okladka-wtyczka-olx.jpg";
+import vintedPluginCover from "@/assets/okladka-wtyczka-vinted.jpg";
+import olxPolandCover from "@/assets/okladka-tabelki-polska.png";
+import olxRegionsCover from "@/assets/okladka-tabelki-wojewodztwa.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -390,7 +390,7 @@ function Products() {
             >
               <div className="relative overflow-hidden border-b border-border/50">
                 <img
-                  src={product.image.url}
+                  src={product.image}
                   alt={product.alt}
                   loading="lazy"
                   width={1520}
