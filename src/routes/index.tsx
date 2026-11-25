@@ -6,6 +6,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { LeadForm, scrollToNearestForm } from "@/components/LeadForm";
 import { captureSource, TIKTOK_URL, LEAD_EMAIL } from "@/lib/lead";
 import iphone15 from "@/assets/iphone15.jpg";
+import iphone14pro from "@/assets/iphone14pro.jpg";
+import iphone13promax from "@/assets/iphone13promax.jpg";
 import kacper from "@/assets/kacper.jpg";
 
 type Flip = {
@@ -21,10 +23,10 @@ type Flip = {
 
 const FLIPS: Flip[] = [
   { model: "iPhone 14 Pro Max 1 TB", done: "Bateria 86%, nic nie wymieniane", cost: "1400 zł", price: "1650 zł", priceLabel: "Sprzedaż", sold: true, profit: "+250 zł" },
-  { model: "iPhone 15", done: "Wymienione plecki + bateria", cost: "1130 zł", price: "1400 zł", priceLabel: "Sprzedaż", sold: true, profit: "+270 zł", photo: iphone15 },
+  { model: "iPhone 15", done: "Wymienione plecki + bateria", cost: "1130 zł", price: "1400 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +270 zł", photo: iphone15 },
   { model: "iPhone 11 Pro Max", done: "Wymieniona bateria (telefon 300 zł + bateria 60 zł)", cost: "360 zł", price: "550 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +190 zł" },
-  { model: "iPhone 14 Pro", done: "Wymieniony ekran + bateria", cost: "900 zł", price: "1400 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +500 zł" },
-  { model: "iPhone 13 Pro Max", done: "Wymieniona bateria, cena zbita o 200 zł", cost: "830 zł", price: "1200 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +370 zł" },
+  { model: "iPhone 14 Pro", done: "Wymieniony ekran + bateria", cost: "900 zł", price: "1400 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +500 zł", photo: iphone14pro },
+  { model: "iPhone 13 Pro Max", done: "Wymieniona bateria, cena zbita o 200 zł", cost: "830 zł", price: "1200 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +370 zł", photo: iphone13promax },
   { model: "iPhone 13", done: "Telefon 330 zł + części 180 zł", cost: "510 zł", price: "750 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +240 zł" },
 ];
 
