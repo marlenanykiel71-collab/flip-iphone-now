@@ -39,7 +39,7 @@
   --animate-shimmer: shimmer 3s linear infinite;
 }
 
-':root {
+:root {
   --radius: 1rem;
   --background: #0f1420;
   --foreground: #f5f7fb;
