@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { normalizePlPhone, isValidEmail, ABOUT_MAX } from "@/lib/lead";
 
-const TO = "flipiphoneflipper7@gmail.com";
+const TO = "flipperiphone7@gmail.com";
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
