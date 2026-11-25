@@ -24,7 +24,7 @@ const FLIPS: Flip[] = [
   { model: "iPhone 15", done: "Wymienione plecki + bateria", cost: "1130 zł", price: "1400 zł", priceLabel: "Sprzedaż", sold: true, profit: "+270 zł", photo: iphone15 },
   { model: "iPhone 11 Pro Max", done: "Wymieniona bateria (telefon 300 zł + bateria 60 zł)", cost: "360 zł", price: "550 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +190 zł" },
   { model: "iPhone 14 Pro", done: "Wymieniony ekran + bateria", cost: "900 zł", price: "1400 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +500 zł" },
-  { model: "iPhone 13 Pro Max", done: "Wymieniona bateria, cena zbita o 200 zł", cost: "[KOSZT] zł", price: "1200 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +[ZYSK] zł" },
+  { model: "iPhone 13 Pro Max", done: "Wymieniona bateria, cena zbita o 200 zł", cost: "830 zł", price: "1200 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +370 zł" },
   { model: "iPhone 13", done: "Telefon 330 zł + części 180 zł", cost: "510 zł", price: "750 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +240 zł" },
 ];
 
