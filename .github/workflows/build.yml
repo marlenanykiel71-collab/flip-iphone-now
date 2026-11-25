@@ -53,6 +53,12 @@ jobs:
             sed -i 's|/\./assets/|./assets/|g' "$PUB/index.html"
           fi
 
+          # Subpages: copy shell into folders so direct links work on FTP/static hosts
+          for page in dziekuje polityka-prywatnosci; do
+            mkdir -p "$PUB/$page"
+            sed 's|\./assets/|../assets/|g' "$PUB/index.html" > "$PUB/$page/index.html"
+          done
+
           # GitHub Pages helper + required root files
           touch "$PUB/.nojekyll"
           for f in robots.txt favicon.ico og-image.png placeholder.svg; do

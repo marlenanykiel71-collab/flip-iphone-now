@@ -1,544 +1,255 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Smartphone, Sparkles, ShieldCheck, Zap, BookOpen, MessageCircle, Star, ArrowRight, Wrench, Store, Tag, CheckCircle2, Puzzle, Table2, MapPinned } from "lucide-react";
-import { Toaster } from "@/components/ui/sonner";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { QuoteForm } from "@/components/QuoteForm";
-import { RepairForm } from "@/components/RepairForm";
-import heroIphone from "@/assets/hero-iphone.jpg";
-import flipEbookCover from "@/assets/okladka-flip-iphone.jpg";
-import olxPluginCover from "@/assets/okladka-wtyczka-olx.jpg";
-import vintedPluginCover from "@/assets/okladka-wtyczka-vinted.jpg";
-import olxPolandCover from "@/assets/okladka-tabelki-polska.png";
-import olxRegionsCover from "@/assets/okladka-tabelki-wojewodztwa.jpg";
+import { useEffect, useState } from "react";
+import { ShieldCheck, Banknote, Truck, Video, GraduationCap, Phone, Search, X, Check, ShoppingBag, HandCoins, Wrench, TrendingUp, Users } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { LeadForm, scrollToNearestForm } from "@/components/LeadForm";
+import { captureSource, TIKTOK_URL, LEAD_EMAIL } from "@/lib/lead";
+
+const TITLE = "Kacper – sprawdzone iPhone'y, skup, naprawa i nauka flipowania | Podkarpacie i cała Polska";
+const DESC = "Kupisz, sprzedasz albo naprawisz iPhone'a bez ryzyka. Uczę też flipowania: mentoring i Discord. Zostaw kontakt – oddzwonimy z konkretną propozycją.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "FlipPhone — Wycena iPhone w 30 sekund" },
-      { name: "description", content: "Sprawdź wycenę swojego iPhone — od iPhone X do iPhone 17 Pro Max. Wypełnij formularz i otrzymaj indywidualną wycenę." },
-      { property: "og:title", content: "FlipPhone — Wycena iPhone" },
-      { property: "og:description", content: "Indywidualna wycena Twojego iPhone w 30 sekund." },
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
   }),
   component: Home,
 });
 
+function Cta({ children = "Zostaw kontakt", className = "" }: { children?: React.ReactNode; className?: string }) {
+  return (
+    <button onClick={scrollToNearestForm} className={`btn-cta rounded-2xl px-6 py-3.5 font-extrabold ${className}`}>{children}</button>
+  );
+}
+
+function Section({ id, title, sub, children }: { id?: string; title: string; sub?: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className="px-5 py-16 sm:py-24 animate-fade-up">
+      <div className="mx-auto max-w-5xl">
+        <h2 className="text-3xl sm:text-4xl font-black leading-tight">{title}</h2>
+        {sub && <p className="mt-3 text-muted-foreground text-lg">{sub}</p>}
+        <div className="mt-10">{children}</div>
+      </div>
+    </section>
+  );
+}
+
 function Home() {
-  const [open, setOpen] = useState(false);
-  const [repairOpen, setRepairOpen] = useState(false);
-  return (
-    <div className="min-h-screen relative overflow-x-hidden">
-      <Toaster theme="dark" position="top-center" />
-      <BackgroundFX />
-      <Nav onQuote={() => setOpen(true)} />
-      <Hero onQuote={() => setOpen(true)} />
-      <Features />
-      <Repair onRepair={() => setRepairOpen(true)} />
-      <Marketplace />
-      <Products />
-      <Discord />
-      <Testimonials />
-      <FAQ />
-      <Footer />
-      <QuoteForm open={open} onOpenChange={setOpen} />
-      <RepairForm open={repairOpen} onOpenChange={setRepairOpen} />
-    </div>
-  );
-}
+  const [sticky, setSticky] = useState(false);
+  const [exitOpen, setExitOpen] = useState(false);
 
-function BackgroundFX() {
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full"
-           style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 235 / 0.35), transparent)" }} />
-      <div className="absolute bottom-[-20%] right-[-10%] h-[500px] w-[500px] rounded-full"
-           style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 200 / 0.25), transparent)" }} />
-    </div>
-  );
-}
+  useEffect(() => {
+    captureSource();
+    const onScroll = () => setSticky(window.scrollY > window.innerHeight * 0.9);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    const desktop = window.matchMedia("(min-width: 1024px) and (pointer: fine)").matches;
+    const onLeave = (e: MouseEvent) => {
+      if (e.clientY > 0 || sessionStorage.getItem("exit_shown")) return;
+      sessionStorage.setItem("exit_shown", "1");
+      setExitOpen(true);
+    };
+    if (desktop) document.addEventListener("mouseout", onLeave);
+    return () => { window.removeEventListener("scroll", onScroll); document.removeEventListener("mouseout", onLeave); };
+  }, []);
 
-function Nav({ onQuote }: { onQuote: () => void }) {
   return (
-    <header className="sticky top-0 z-40 px-4 pt-4">
-      <div className="glass mx-auto flex max-w-6xl items-center justify-between rounded-full px-5 py-3">
-        <a href="#top" className="flex items-center gap-2 font-semibold tracking-tight">
-          <div className="grid place-items-center h-8 w-8 rounded-xl btn-premium">
-            <Smartphone className="h-4 w-4" />
+    <main className="overflow-x-hidden pb-24 lg:pb-0">
+      {/* HERO */}
+      <section className="px-5 pt-8 pb-14 sm:pt-16">
+        <div className="mx-auto max-w-5xl grid lg:grid-cols-2 gap-10 items-start">
+          <div className="animate-fade-up">
+            <span className="inline-block rounded-full border border-border bg-card px-4 py-1.5 text-sm font-semibold">📍 Podkarpacie · 🚚 wysyłka w całej Polsce</span>
+            <h1 className="mt-5 text-4xl sm:text-5xl font-black leading-[1.05]">
+              Kupisz, sprzedasz albo naprawisz iPhone'a – <span className="text-accent">bez ryzyka</span> i bez szukania na OLX
+            </h1>
+            <p className="mt-5 text-lg text-muted-foreground">
+              Jestem Kacper. Codziennie kupuję, sprawdzam i naprawiam używane iPhone'y – i uczę innych, jak na tym zarabiać. Zostaw kontakt, oddzwonimy z konkretną propozycją.
+            </p>
+            <ul className="mt-6 space-y-2 text-sm font-semibold hidden lg:block">
+              <TrustItems />
+            </ul>
           </div>
-          <span>FlipPhone</span>
-        </a>
-        <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
-          <a href="#features" className="hover:text-foreground transition">Dlaczego my</a>
-          <a href="#repair" className="hover:text-foreground transition">Naprawa</a>
-          <a href="#marketplace" className="hover:text-foreground transition">iPhone&apos;y</a>
-          <a href="#oferty" className="hover:text-foreground transition">Oferty</a>
-          <a href="#discord" className="hover:text-foreground transition">Społeczność</a>
-          <a href="#faq" className="hover:text-foreground transition">FAQ</a>
-        </nav>
-        <button onClick={onQuote} className="btn-premium btn-premium-hover rounded-full px-5 py-2 text-sm font-medium">
-          Wyceń telefon
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function Hero({ onQuote }: { onQuote: () => void }) {
-  return (
-    <section id="top" className="relative px-4 pt-20 pb-32 md:pt-32 md:pb-40">
-      <div className="mx-auto max-w-6xl grid md:grid-cols-2 gap-12 items-center">
-        <div className="animate-fade-up">
-          <div className="glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            Wycena w 30 sekund • Bez zobowiązań
-          </div>
-          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05]">
-            <span className="text-gradient">Sprawdź wycenę</span>
-            <br />
-            <span className="text-gradient-primary">swojego iPhone&apos;a</span>
-          </h1>
-          <p className="mt-6 text-lg text-muted-foreground max-w-md">
-            Wypełnij formularz i otrzymaj indywidualną wycenę swojego telefonu.
-          </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <button onClick={onQuote} className="btn-premium btn-premium-hover rounded-full px-7 py-4 font-semibold text-base inline-flex items-center gap-2">
-              Wyceń telefon <ArrowRight className="h-4 w-4" />
-            </button>
-            <a href="#features" className="glass rounded-full px-7 py-4 font-medium text-base hover:bg-white/10 transition">
-              Dowiedz się więcej
-            </a>
-          </div>
-          <div className="mt-10 flex items-center gap-6 text-xs text-muted-foreground">
-            <Trust icon={ShieldCheck} text="Bezpiecznie" />
-            <Trust icon={Zap} text="Szybko" />
-            <Trust icon={Star} text="500+ wycen" />
+          <div>
+            <LeadForm id="form-hero" />
+            <ul className="mt-5 space-y-2 text-sm font-semibold lg:hidden"><TrustItems /></ul>
           </div>
         </div>
+      </section>
 
-        <div className="relative animate-fade-up [animation-delay:200ms]">
-          <div className="absolute inset-0 blur-3xl opacity-60"
-               style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 235 / 0.5), transparent)" }} />
-          <img
-            src={heroIphone}
-            alt="iPhone premium"
-            width={1024} height={1024}
-            className="relative w-full max-w-md mx-auto rounded-3xl animate-float"
-            style={{ filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.6))" }}
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Trust({ icon: Icon, text }: { icon: any; text: string }) {
-  return (
-    <div className="flex items-center gap-2">
-      <Icon className="h-4 w-4 text-primary" /> {text}
-    </div>
-  );
-}
-
-function Features() {
-  const items = [
-    { icon: Zap, title: "Najlepsza wycena", desc: "Płacimy więcej niż lombardy i komisy. Wycena szyta na miarę." },
-    { icon: ShieldCheck, title: "Pełne bezpieczeństwo", desc: "Transparentny proces, umowa, bezpieczna płatność." },
-    { icon: Sparkles, title: "Bez ukrytych kosztów", desc: "Cena z wyceny to cena, którą dostajesz na konto." },
-  ];
-  return (
-    <section id="features" className="px-4 py-24">
-      <div className="mx-auto max-w-6xl">
-        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gradient text-center">
-          Dlaczego FlipPhone
-        </h2>
-        <p className="mt-4 text-center text-muted-foreground max-w-xl mx-auto">
-          Najprostszy sposób, żeby zamienić starego iPhone&apos;a na gotówkę.
-        </p>
-        <div className="mt-14 grid md:grid-cols-3 gap-5">
-          {items.map((it) => (
-            <div key={it.title} className="glass rounded-3xl p-7 hover:-translate-y-1 hover:bg-white/10 transition duration-500">
-              <div className="h-12 w-12 rounded-2xl btn-premium grid place-items-center">
-                <it.icon className="h-5 w-5" />
-              </div>
-              <h3 className="mt-5 text-xl font-semibold">{it.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{it.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Repair({ onRepair }: { onRepair: () => void }) {
-  return (
-    <section id="repair" className="px-4 py-24">
-      <div className="mx-auto max-w-6xl glass rounded-[2rem] p-8 md:p-14 grid md:grid-cols-2 gap-12 items-center overflow-hidden relative">
-        <div
-          aria-hidden
-          className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full opacity-50"
-          style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 200 / 0.5), transparent)" }}
-        />
-        <div className="relative">
-          <div className="inline-flex items-center gap-2 text-xs text-primary">
-            <Wrench className="h-4 w-4" /> NAPRAWA
-          </div>
-          <h2 className="mt-3 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
-            Naprawa Twojego iPhone
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-md">
-            Pęknięty ekran, problem z baterią, zalanie? Wybierz model, opisz uszkodzenie — wycenimy naprawę.
-          </p>
-          <button
-            onClick={onRepair}
-            className="btn-premium btn-premium-hover mt-7 inline-flex items-center gap-2 rounded-full px-7 py-4 font-semibold"
-          >
-            Zgłoś naprawę <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-        <div className="relative grid grid-cols-2 gap-4">
+      {/* DLA KOGO */}
+      <Section title="Z czym mogę Ci pomóc?">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
-            { t: "Wymiana ekranu", d: "Oryginalne części" },
-            { t: "Wymiana baterii", d: "100% kondycji" },
-            { t: "Po zalaniu", d: "Czyszczenie i diagnoza" },
-            { t: "Inne usterki", d: "Głośnik, kamera, port" },
-          ].map((it) => (
-            <div key={it.t} className="glass rounded-2xl p-5">
-              <div className="h-10 w-10 rounded-xl btn-premium grid place-items-center">
-                <Wrench className="h-4 w-4" />
-              </div>
-              <h3 className="mt-3 font-semibold">{it.t}</h3>
-              <p className="text-xs text-muted-foreground mt-1">{it.d}</p>
+            { i: ShoppingBag, t: "KUPUJESZ", d: "Sprawdzony iPhone bez ukrytych wad, blokad i niespodzianek." },
+            { i: HandCoins, t: "SPRZEDAJESZ", d: "Bez ogłoszeń, oszustów i targowania się z 30 osobami." },
+            { i: Wrench, t: "NAPRAWA", d: "Bateria, plecki, ekran – powiem uczciwie, czy się opłaca." },
+            { i: TrendingUp, t: "CHCESZ ZARABIAĆ NA FLIPACH", d: "Mentoring krok po kroku – od pierwszego telefonu do regularnego zysku." },
+            { i: Users, t: "SPOŁECZNOŚĆ I NARZĘDZIA", d: "Discord z okazjami i wsparciem + produkty cyfrowe dla flipperów." },
+          ].map(({ i: I, t, d }) => (
+            <div key={t} className="rounded-2xl border border-border bg-card p-6 flex flex-col transition hover:-translate-y-1 hover:border-primary">
+              <I className="h-8 w-8 text-primary" />
+              <h3 className="mt-4 font-black text-lg">{t}</h3>
+              <p className="mt-2 text-muted-foreground flex-1">{d}</p>
+              <Cta className="mt-5 w-full">Zostaw kontakt</Cta>
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
+      </Section>
 
-function Marketplace() {
-  const perks = [
-    "Sprawdzone urządzenia",
-    "Pełna historia telefonu",
-    "Gwarancja sprzedawcy",
-  ];
-  return (
-    <section id="marketplace" className="px-4 py-24">
-      <div className="mx-auto max-w-6xl">
-        <div className="text-center mb-14">
-          <div className="glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted-foreground">
-            <Store className="h-3.5 w-3.5 text-primary" />
-            MARKETPLACE
-          </div>
-          <h2 className="mt-5 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
-            Sprawdź dostępne iPhone&apos;y
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-            Zobacz aktualnie dostępne urządzenia wystawione na sprzedaż.
-          </p>
-        </div>
-
-        <div className="relative group max-w-3xl mx-auto">
-          <div
-            aria-hidden
-            className="absolute -inset-px rounded-[2rem] opacity-70 group-hover:opacity-100 transition duration-700 blur-sm"
-            style={{ background: "linear-gradient(135deg, oklch(0.6 0.22 235 / 0.6), oklch(0.6 0.22 280 / 0.5), oklch(0.6 0.22 200 / 0.6))" }}
-          />
-          <div className="relative glass rounded-[2rem] p-8 md:p-12 overflow-hidden">
-            <div
-              aria-hidden
-              className="absolute -top-24 -right-24 h-72 w-72 rounded-full opacity-50"
-              style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 235 / 0.5), transparent)" }}
-            />
-            <div className="relative grid md:grid-cols-[auto_1fr_auto] gap-8 items-center">
-              <div className="relative mx-auto md:mx-0">
-                <div
-                  aria-hidden
-                  className="absolute inset-0 blur-2xl opacity-70"
-                  style={{ background: "radial-gradient(closest-side, oklch(0.6 0.22 235 / 0.6), transparent)" }}
-                />
-                <div className="relative h-24 w-24 md:h-28 md:w-28 rounded-3xl btn-premium grid place-items-center group-hover:scale-105 transition duration-500">
-                  <Smartphone className="h-12 w-12" />
-                </div>
-              </div>
-
-              <div className="text-center md:text-left">
-                <div className="inline-flex items-center gap-2 text-xs text-primary mb-2">
-                  <Tag className="h-3.5 w-3.5" /> AKTUALNE OFERTY
-                </div>
-                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                  iPhone&apos;y w świetnych cenach
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground max-w-md">
-                  Wszystkie modele od iPhone X po iPhone 17 Pro Max — gotowe do wysyłki.
-                </p>
-                <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2">
-                  {perks.map((p) => (
-                    <div key={p} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-primary" /> {p}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <a
-                href="https://www.olx.pl/oferty/user/2568Rr/"
-                target="_blank" rel="noopener noreferrer"
-                className="btn-premium btn-premium-hover rounded-full px-7 py-4 font-semibold inline-flex items-center gap-2 whitespace-nowrap"
-              >
-                Zobacz oferty <ArrowRight className="h-4 w-4" />
-              </a>
-            </div>
+      {/* PROBLEM */}
+      <Section title="Znasz to?">
+        <div className="grid lg:grid-cols-2 gap-6">
+          <ul className="rounded-2xl border border-border bg-card p-6 space-y-3">
+            {["Oszuści na OLX", "Telefony z blokadą", "Wady, które wychodzą po tygodniu", "Tygodnie czekania na kupca", "Zaniżone oferty skupów", "Brak wiedzy, od czego zacząć flipowanie"].map((x) => (
+              <li key={x} className="flex gap-3"><X className="h-6 w-6 shrink-0 text-destructive" />{x}</li>
+            ))}
+          </ul>
+          <div className="rounded-2xl border border-primary bg-card p-6 flex flex-col justify-center">
+            <p className="flex gap-3 text-2xl font-black"><Check className="h-8 w-8 shrink-0 text-primary" />Jeden kontakt i sprawa załatwiona.</p>
+            <Cta className="mt-6">Zostaw kontakt</Cta>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </Section>
 
-function Products() {
-  const products = [
-    {
-      image: flipEbookCover,
-      icon: BookOpen,
-      category: "EBOOK • PRAKTYCZNY PORADNIK",
-      title: "Flip iPhone’ów",
-      description: "Poznaj proces kupna, sprawdzania i sprzedaży iPhone’ów na OLX i Vinted. Konkretna wiedza, checklisty i prawdziwe przykłady flipów.",
-      href: "https://www.naffy.io/iphone-flipper/flip-iphoneow-od-300-zl-zysku-na-jednym-telefonie-e-book-o-kupowaniu-i-sprzedazy-na-olx-i-vinted-hbn",
-      cta: "Zobacz ebook",
-      alt: "Okładka ebooka Flip iPhone’ów — od 300 zł zysku na jednym telefonie",
-    },
-    {
-      image: olxPluginCover,
-      icon: Puzzle,
-      category: "WTYCZKA DO CHROME I OPERY",
-      title: "Wtyczka OLX",
-      description: "Wyceniaj telefony według własnego cennika i wysyłaj sprzedającym gotową wiadomość ze swoją ceną — jednym kliknięciem.",
-      href: "https://www.naffy.io/iphone-flipper/wtyczka-olx-iphone-oferta-wysylaj-sprzedajacym-swoja-cene-jednym-kliknieciem-gqc",
-      cta: "Sprawdź wtyczkę",
-      alt: "Okładka wtyczki OLX — wiadomości do sprzedających jednym kliknięciem",
-    },
-    {
-      image: vintedPluginCover,
-      icon: Puzzle,
-      category: "WTYCZKA DO CHROME I OPERY",
-      title: "Wtyczka Vinted",
-      description: "Składaj oferty i wysyłaj wiadomości do sprzedających jednym kliknięciem, z wyceną iPhone’a opartą na Twoim cenniku skupu.",
-      href: "https://www.naffy.io/iphone-flipper/wtyczka-vinted-iphone-oferta-skladaj-oferty-i-wysylaj-wiadomosci-do-sprzedajacych-jednym-kliknieci-lfd",
-      cta: "Sprawdź wtyczkę",
-      alt: "Okładka wtyczki Vinted — oferty na iPhone’y jednym kliknięciem",
-    },
-    {
-      image: olxPolandCover,
-      icon: Table2,
-      category: "CENY Z CAŁEJ POLSKI",
-      title: "Ceny OLX Polska",
-      description: "Realne ceny iPhone’ów z najnowszych ogłoszeń z całej Polski w jednej tabeli. Sprawdzaj cenę rynkową i szybką cenę bez zgadywania.",
-      href: "https://www.naffy.io/iphone-flipper/ceny-olx-polska-tabelka-realnych-cen-iphoneow-z-olx-w-jednym-kliknieciu-zd3",
-      cta: "Sprawdź ceny",
-      alt: "Okładka tabelki Ceny OLX Polska — ceny iPhone’ów z OLX w jednej tabeli",
-    },
-    {
-      image: olxRegionsCover,
-      icon: MapPinned,
-      category: "CAŁA POLSKA I 16 WOJEWÓDZTW",
-      title: "Ceny OLX Województwa",
-      description: "Porównuj realne ceny w całej Polsce i 16 województwach. Sprawdzaj, gdzie kupić taniej, a gdzie sprzedać drożej.",
-      href: "https://www.naffy.io/iphone-flipper/ceny-olx-wojewodztwa-realne-ceny-iphoneow-z-olx-dla-calej-polski-i-16-wojewodztw-nlj",
-      cta: "Sprawdź regiony",
-      alt: "Okładka tabelki Ceny OLX Województwa — realne ceny iPhone’ów dla całej Polski i 16 województw",
-    },
-  ];
-
-  return (
-    <section id="oferty" className="px-4 py-24">
-      <div className="mx-auto max-w-6xl">
-        <div className="text-center mb-14">
-          <div className="glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            OFERTY FLIPPHONE
-          </div>
-          <h2 className="mt-5 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
-            Flipuj mądrzej, nie ciężej
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Praktyczna wiedza i narzędzia, które pomogą Ci szybciej znajdować okazje, sprawdzać ceny i składać oferty.
-          </p>
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-6 items-stretch">
-          {products.map((product, index) => (
-            <article
-              key={product.title}
-              className={`group glass relative flex h-full flex-col overflow-hidden rounded-[1.75rem] transition duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10 ${
-                index < 3
-                  ? "lg:col-span-2"
-                  : index === 3
-                    ? "lg:col-span-2 lg:col-start-2"
-                    : "lg:col-span-2 lg:col-start-4"
-              }`}
-            >
-              <div className="relative overflow-hidden border-b border-border/50">
-                <img
-                  src={product.image}
-                  alt={product.alt}
-                  loading="lazy"
-                  width={1520}
-                  height={2000}
-                  className="aspect-[19/25] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
-                />
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <div className="flex items-center gap-2 text-[11px] font-medium tracking-wide text-primary">
-                  <product.icon className="h-3.5 w-3.5 shrink-0" />
-                  {product.category}
-                </div>
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight">{product.title}</h3>
-                <p className="mb-6 mt-3 text-sm leading-relaxed text-muted-foreground">{product.description}</p>
-                <a
-                  href={product.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-premium btn-premium-hover mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 font-semibold transition group-hover:gap-3"
-                >
-                  {product.cta} <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Discord() {
-  return (
-    <section id="discord" className="px-4 py-24">
-      <div className="mx-auto max-w-4xl glass rounded-[2rem] p-10 md:p-16 text-center relative overflow-hidden">
-        <div aria-hidden className="absolute inset-0 opacity-60"
-             style={{ background: "radial-gradient(ellipse at center, oklch(0.5 0.2 270 / 0.35), transparent 70%)" }} />
-        <div className="relative">
-          <div className="mx-auto h-14 w-14 rounded-2xl btn-premium grid place-items-center">
-            <MessageCircle className="h-6 w-6" />
-          </div>
-          <h2 className="mt-6 text-4xl md:text-5xl font-semibold tracking-tight text-gradient">
-            Dołącz do darmowej społeczności
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-md mx-auto">
-            Społeczność osób zajmujących się flipowaniem iPhone.
-          </p>
-          <a
-            href="https://discord.gg/e8hKFCGsQc"
-            target="_blank" rel="noopener noreferrer"
-            className="btn-premium btn-premium-hover mt-8 inline-flex items-center gap-2 rounded-full px-7 py-4 font-semibold"
-          >
-            Dołącz do Discorda <ArrowRight className="h-4 w-4" />
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Testimonials() {
-  const items = [
-    { name: "Michał K.", text: "Wycena lepsza niż w 3 innych miejscach. Pieniądze na koncie tego samego dnia.", model: "iPhone 14 Pro" },
-    { name: "Anna W.", text: "Profesjonalna obsługa i konkretna komunikacja. Polecam każdemu.", model: "iPhone 13" },
-    { name: "Krzysztof L.", text: "Sprzedałem 4 telefony — zawsze szybko, uczciwie i bez problemów.", model: "iPhone 15 Pro Max" },
-  ];
-  return (
-    <section className="px-4 py-24">
-      <div className="mx-auto max-w-6xl">
-        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gradient text-center">
-          Co mówią klienci
-        </h2>
-        <div className="mt-14 grid md:grid-cols-3 gap-5">
-          {items.map((t) => (
-            <div key={t.name} className="glass rounded-3xl p-7 hover:-translate-y-1 transition duration-500">
-              <div className="flex gap-1 text-primary">
-                {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
-              </div>
-              <p className="mt-4 text-foreground/90 leading-relaxed">&ldquo;{t.text}&rdquo;</p>
-              <div className="mt-6 flex items-center justify-between text-sm">
-                <span className="font-medium">{t.name}</span>
-                <span className="text-muted-foreground">{t.model}</span>
-              </div>
+      {/* DLACZEGO JA */}
+      <Section title="Dlaczego ja?">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            { i: Search, t: "Sprawdzam każdy telefon", d: "Bateria, Face ID, aparaty, IMEI, blokady." },
+            { i: Phone, t: "Uczciwa wycena przez telefon", d: "Bez zgadywania i bez zaniżania." },
+            { i: Banknote, t: "Szybka gotówka albo przelew", d: "Jak Ci wygodniej." },
+            { i: Truck, t: "Odbiór albo wysyłka", d: "Osobiście na Podkarpaciu albo wysyłka w całą Polskę." },
+            { i: Video, t: "Wszystko pokazuję na TikToku", d: "Publicznie, bez ściemy." },
+            { i: GraduationCap, t: "Uczę tego, co sam robię", d: "Na co dzień. Zero teorii." },
+          ].map(({ i: I, t, d }) => (
+            <div key={t} className="rounded-2xl border border-border bg-card p-6">
+              <I className="h-7 w-7 text-accent" />
+              <h3 className="mt-3 font-extrabold">{t}</h3>
+              <p className="mt-1 text-muted-foreground">{d}</p>
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
+      </Section>
 
-function FAQ() {
-  const items = [
-    { q: "Jak długo czeka się na wycenę?", a: "Wycenę odsyłamy zazwyczaj tego samego dnia — w godzinach pracy w ciągu kilku godzin." },
-    { q: "Czy wycena jest wiążąca?", a: "Nie. Wycena jest niezobowiązująca — możesz, ale nie musisz sprzedać telefonu." },
-    { q: "Jakie modele skupujecie?", a: "Wszystkie modele iPhone od iPhone X po najnowsze iPhone 17 Pro Max." },
-    { q: "W jaki sposób płacicie?", a: "Najczęściej przelewem na konto w dniu odbioru telefonu lub gotówką przy odbiorze osobistym." },
-    { q: "Czy skupujecie uszkodzone iPhone?", a: "Tak — wyceniamy również telefony z uszkodzeniami, po zalaniu czy z wymienianym ekranem." },
-  ];
-  return (
-    <section id="faq" className="px-4 py-24">
-      <div className="mx-auto max-w-3xl">
-        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gradient text-center">
-          Najczęstsze pytania
-        </h2>
-        <Accordion type="single" collapsible className="mt-12 space-y-3">
-          {items.map((it, i) => (
-            <AccordionItem
-              key={i}
-              value={`item-${i}`}
-              className="glass rounded-2xl px-5 border-white/10"
-            >
-              <AccordionTrigger className="text-left hover:no-underline">{it.q}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">{it.a}</AccordionContent>
+      {/* JAK TO DZIAŁA */}
+      <Section title="Jak to działa?">
+        <ol className="grid sm:grid-cols-3 gap-4">
+          {["Zostawiasz kontakt (niecała minuta)", "Oddzwaniamy i pytamy, czego potrzebujesz", "Dostajesz konkretną propozycję i decydujesz"].map((s, i) => (
+            <li key={s} className="rounded-2xl border border-border bg-card p-6">
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-accent text-accent-foreground font-black">{i + 1}</span>
+              <p className="mt-4 font-bold text-lg">{s}</p>
+            </li>
+          ))}
+        </ol>
+        <Cta className="mt-8 w-full sm:w-auto">Zostaw kontakt – to nic nie kosztuje</Cta>
+      </Section>
+
+      {/* FLIPY */}
+      <Section title="Prawdziwe flipy" sub="Telefony, które przeszły przez moje ręce.">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="rounded-2xl border border-border bg-card overflow-hidden">
+              <div className="aspect-square bg-muted grid place-items-center text-muted-foreground font-bold">[ZDJĘCIE]</div>
+              <div className="p-4"><p className="font-extrabold">[MODEL]</p><p className="text-sm text-muted-foreground">[OPIS]</p></div>
+            </div>
+          ))}
+        </div>
+        <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="mt-8 inline-block rounded-2xl border border-border bg-card px-6 py-3.5 font-extrabold hover:border-primary">Zobacz więcej na TikToku →</a>
+      </Section>
+
+      {/* OPINIE */}
+      <Section title="Opinie">
+        <div className="grid sm:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <figure key={i} className="rounded-2xl border border-border bg-card p-6">
+              <p className="text-accent">★★★★★</p>
+              <blockquote className="mt-3">„[OPINIA]”</blockquote>
+              <figcaption className="mt-4 text-sm font-bold">[IMIĘ], [MIASTO]</figcaption>
+            </figure>
+          ))}
+        </div>
+      </Section>
+
+      {/* O MNIE */}
+      <Section title="Kim jestem?">
+        <div className="grid sm:grid-cols-[220px_1fr] gap-8 items-center">
+          <div className="aspect-square rounded-3xl bg-muted border border-border grid place-items-center text-muted-foreground font-bold">[MOJE_ZDJĘCIE]</div>
+          <div className="space-y-4 text-lg text-muted-foreground">
+            <p><span className="text-foreground font-bold">Cześć, jestem Kacper.</span> Na co dzień kupuję, sprawdzam, naprawiam i sprzedaję używane iPhone'y.</p>
+            <p>Uczę też innych, jak na tym zarabiać – przez mentoring, społeczność na Discordzie i produkty cyfrowe dla flipperów.</p>
+            <p>Działam na Podkarpaciu i wysyłam w całą Polskę. Wszystko pokazuję na TikToku:{" "}
+              <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="text-accent font-bold underline">@kapi_flipper7</a>.</p>
+          </div>
+        </div>
+      </Section>
+
+      {/* FAQ */}
+      <Section title="Najczęstsze pytania">
+        <Accordion type="single" collapsible className="rounded-2xl border border-border bg-card px-5">
+          {[
+            ["Skąd mam wiedzieć, że telefon nie ma wad?", "Każdy telefon sprawdzam punkt po punkcie: baterię, Face ID, aparaty, IMEI i blokady. Zostaw kontakt, a opowiemy Ci o konkretnym egzemplarzu."],
+            ["Ile dostanę za mojego iPhone'a?", "Zależy od modelu i stanu – zostaw kontakt, wycenimy go przez telefon w kilka minut."],
+            ["Czy wysyłacie poza Podkarpacie?", "Tak, wysyłamy w całą Polskę. Zostaw kontakt, a ustalimy szczegóły."],
+            ["Jak wygląda odbiór osobisty?", "Umawiamy się na Podkarpaciu, sprawdzasz telefon na miejscu i dopiero wtedy decydujesz. Zostaw kontakt, dogadamy termin."],
+            ["Czy naprawiacie też telefony, których nie sprzedajecie?", "Tak – bateria, plecki, ekran i powiem uczciwie, czy naprawa się opłaca. Zostaw kontakt i opisz problem."],
+            ["Czym jest mentoring i dla kogo jest Discord?", "Mentoring to nauka flipowania krok po kroku, a Discord to społeczność z okazjami i wsparciem. Zostaw kontakt, powiemy, co pasuje do Ciebie."],
+            ["Czy zostawienie kontaktu do czegoś zobowiązuje?", "Nie. To tylko rozmowa – zostaw kontakt i sam zdecydujesz."],
+          ].map(([q, a]) => (
+            <AccordionItem key={q} value={q!}>
+              <AccordionTrigger className="text-left font-bold">{q}</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">{a}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
+      </Section>
+
+      {/* FINAŁ */}
+      <section className="px-5 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl rounded-3xl bg-cta border border-border p-5 sm:p-10">
+          <h2 className="text-3xl sm:text-4xl font-black leading-tight text-center">Nie musisz nic wiedzieć. Wystarczy, że zostawisz kontakt.</h2>
+          <p className="mt-3 text-center text-muted-foreground">Szybko · bez zobowiązań · bez spamu</p>
+          <div className="mt-8"><LeadForm id="form-final" /></div>
+        </div>
+      </section>
+
+      <footer className="border-t border-border px-5 py-10 text-sm text-muted-foreground">
+        <div className="mx-auto max-w-5xl flex flex-col sm:flex-row flex-wrap gap-x-6 gap-y-2">
+          <span className="font-bold text-foreground">Kacper</span>
+          <span>Podkarpacie / cała Polska</span>
+          <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">TikTok @kapi_flipper7</a>
+          <a href={`mailto:${LEAD_EMAIL}`} className="hover:text-foreground">{LEAD_EMAIL}</a>
+          <a href="./polityka-prywatnosci" className="hover:text-foreground underline">Polityka prywatności</a>
+        </div>
+      </footer>
+
+      {/* STICKY MOBILE */}
+      <div className={`fixed inset-x-0 bottom-0 z-40 p-3 bg-background/95 border-t border-border lg:hidden transition-transform ${sticky ? "translate-y-0" : "translate-y-full"}`}>
+        <Cta className="w-full text-lg">📞 Oddzwońcie do mnie</Cta>
       </div>
-    </section>
+
+      <Dialog open={exitOpen} onOpenChange={setExitOpen}>
+        <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto bg-background border-border p-4">
+          <DialogTitle className="text-2xl font-black">Zanim wyjdziesz – zostaw kontakt, oddzwonimy</DialogTitle>
+          <LeadForm id="form-exit" heading={false} />
+        </DialogContent>
+      </Dialog>
+    </main>
   );
 }
 
-function Footer() {
+function TrustItems() {
   return (
-    <footer className="px-4 pb-10 pt-20">
-      <div className="mx-auto max-w-6xl glass rounded-3xl p-8 md:p-10 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 font-semibold">
-            <div className="grid place-items-center h-8 w-8 rounded-xl btn-premium">
-              <Smartphone className="h-4 w-4" />
-            </div>
-            FlipPhone
-          </div>
-          <p className="mt-3 text-sm text-muted-foreground max-w-sm">
-            Premium skup i wycena iPhone. Szybko, bezpiecznie, uczciwie.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
-          <a href="#features" className="hover:text-foreground transition">Dlaczego my</a>
-          <a href="#oferty" className="hover:text-foreground transition">Oferty</a>
-          <a href="#discord" className="hover:text-foreground transition">Discord</a>
-          <a href="#faq" className="hover:text-foreground transition">FAQ</a>
-          <a href="mailto:flipperiphone7@gmail.com" className="hover:text-foreground transition">Kontakt</a>
-        </div>
-      </div>
-      <p className="mt-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} FlipPhone. Wszelkie prawa zastrzeżone.
-      </p>
-    </footer>
+    <>
+      <li className="flex gap-2"><ShieldCheck className="h-5 w-5 text-primary" />Każdy telefon sprawdzony punkt po punkcie</li>
+      <li className="flex gap-2"><ShieldCheck className="h-5 w-5 text-primary" />Szybka gotówka za Twój telefon</li>
+      <li className="flex gap-2"><ShieldCheck className="h-5 w-5 text-primary" />Znasz mnie z TikToka @kapi_flipper7</li>
+    </>
   );
 }

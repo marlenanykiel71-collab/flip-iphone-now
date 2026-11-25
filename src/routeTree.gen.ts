@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DziekujeRouteImport } from './routes/dziekuje'
+import { Route as PolitykaPrywatnosciRouteImport } from './routes/polityka-prywatnosci'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DziekujeRoute = DziekujeRouteImport.update({
+  id: '/dziekuje',
+  path: '/dziekuje',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PolitykaPrywatnosciRoute = PolitykaPrywatnosciRouteImport.update({
+  id: '/polityka-prywatnosci',
+  path: '/polityka-prywatnosci',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dziekuje': typeof DziekujeRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dziekuje': typeof DziekujeRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dziekuje': typeof DziekujeRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/dziekuje' | '/polityka-prywatnosci'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/dziekuje' | '/polityka-prywatnosci'
+  id: '__root__' | '/' | '/dziekuje' | '/polityka-prywatnosci'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DziekujeRoute: typeof DziekujeRoute
+  PolitykaPrywatnosciRoute: typeof PolitykaPrywatnosciRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dziekuje': {
+      id: '/dziekuje'
+      path: '/dziekuje'
+      fullPath: '/dziekuje'
+      preLoaderRoute: typeof DziekujeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/polityka-prywatnosci': {
+      id: '/polityka-prywatnosci'
+      path: '/polityka-prywatnosci'
+      fullPath: '/polityka-prywatnosci'
+      preLoaderRoute: typeof PolitykaPrywatnosciRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DziekujeRoute: DziekujeRoute,
+  PolitykaPrywatnosciRoute: PolitykaPrywatnosciRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
