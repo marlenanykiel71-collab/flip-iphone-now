@@ -5,6 +5,28 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { LeadForm, scrollToNearestForm } from "@/components/LeadForm";
 import { captureSource, TIKTOK_URL, LEAD_EMAIL } from "@/lib/lead";
+import iphone15 from "@/assets/iphone15.jpg";
+import kacper from "@/assets/kacper.jpg";
+
+type Flip = {
+  model: string;
+  done: string;
+  cost: string;
+  price: string;
+  priceLabel: string;
+  sold: boolean;
+  profit: string;
+  photo?: string;
+};
+
+const FLIPS: Flip[] = [
+  { model: "iPhone 14 Pro Max 1 TB", done: "Bateria 86%, nic nie wymieniane", cost: "1400 zł", price: "1650 zł", priceLabel: "Sprzedaż", sold: true, profit: "+250 zł" },
+  { model: "iPhone 15", done: "Wymienione plecki + bateria", cost: "1130 zł", price: "1400 zł", priceLabel: "Sprzedaż", sold: true, profit: "+270 zł", photo: iphone15 },
+  { model: "iPhone 11 Pro Max", done: "Wymieniona bateria (telefon 300 zł + bateria 60 zł)", cost: "360 zł", price: "550 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +190 zł" },
+  { model: "iPhone 14 Pro", done: "Wymieniony ekran + bateria", cost: "900 zł", price: "1400 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +500 zł" },
+  { model: "iPhone 13 Pro Max", done: "Wymieniona bateria, cena zbita o 200 zł", cost: "[KOSZT] zł", price: "1200 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +[ZYSK] zł" },
+  { model: "iPhone 13", done: "Telefon 330 zł + części 180 zł", cost: "510 zł", price: "750 zł", priceLabel: "Wystawiony za", sold: false, profit: "do +240 zł" },
+];
 
 const TITLE = "Kacper – sprawdzone iPhone'y, skup, naprawa i nauka flipowania | Podkarpacie i cała Polska";
 const DESC = "Kupisz, sprzedasz albo naprawisz iPhone'a bez ryzyka. Uczę też flipowania: mentoring i Discord. Zostaw kontakt – oddzwonimy z konkretną propozycją.";
@@ -153,15 +175,35 @@ function Home() {
 
       {/* FLIPY */}
       <Section title="Prawdziwe flipy" sub="Telefony, które przeszły przez moje ręce.">
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="rounded-2xl border border-border bg-card overflow-hidden">
-              <div className="aspect-square bg-muted grid place-items-center text-muted-foreground font-bold">[ZDJĘCIE]</div>
-              <div className="p-4"><p className="font-extrabold">[MODEL]</p><p className="text-sm text-muted-foreground">[OPIS]</p></div>
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {FLIPS.map((f) => (
+            <article key={f.model} className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-1 hover:border-primary">
+              <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+                {f.photo ? (
+                  <img src={f.photo} alt={f.model} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+                ) : (
+                  <div className="grid h-full place-items-center"><Phone className="h-10 w-10 text-muted-foreground opacity-30" /></div>
+                )}
+                <span className={`absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-black tracking-wide ${f.sold ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground"}`}>
+                  {f.sold ? "SPRZEDANY" : "NA SPRZEDAŻ"}
+                </span>
+              </div>
+              <div className="p-5">
+                <h3 className="font-black text-lg leading-tight">{f.model}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{f.done}</p>
+                <p className="mt-4 text-sm leading-relaxed">
+                  <span className="text-muted-foreground">Koszt</span> <span className="font-bold">{f.cost}</span>
+                  <span className="text-muted-foreground"> → {f.priceLabel}</span> <span className="font-bold">{f.price}</span>
+                </p>
+                <p className="mt-3 text-3xl font-black text-primary">{f.profit}</p>
+              </div>
+            </article>
           ))}
         </div>
-        <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="mt-8 inline-block rounded-2xl border border-border bg-card px-6 py-3.5 font-extrabold hover:border-primary">Zobacz więcej na TikToku →</a>
+        <Cta className="mt-8 w-full sm:w-auto">Chcesz robić to samo? Zostaw kontakt</Cta>
+        <div className="mt-4">
+          <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="inline-block rounded-2xl border border-border bg-card px-6 py-3.5 font-extrabold hover:border-primary">Zobacz więcej na TikToku →</a>
+        </div>
       </Section>
 
       {/* OPINIE */}
@@ -180,7 +222,9 @@ function Home() {
       {/* O MNIE */}
       <Section title="Kim jestem?">
         <div className="grid sm:grid-cols-[220px_1fr] gap-8 items-center">
-          <div className="aspect-square rounded-3xl bg-muted border border-border grid place-items-center text-muted-foreground font-bold">[MOJE_ZDJĘCIE]</div>
+          <div className="aspect-square overflow-hidden rounded-3xl border border-border bg-muted">
+            <img src={kacper} alt="Kacper – kupuję, naprawiam i sprzedaję iPhone'y" className="h-full w-full object-cover object-center" />
+          </div>
           <div className="space-y-4 text-lg text-muted-foreground">
             <p><span className="text-foreground font-bold">Cześć, jestem Kacper.</span> Na co dzień kupuję, sprawdzam, naprawiam i sprzedaję używane iPhone'y.</p>
             <p>Uczę też innych, jak na tym zarabiać – przez mentoring, społeczność na Discordzie i produkty cyfrowe dla flipperów.</p>
