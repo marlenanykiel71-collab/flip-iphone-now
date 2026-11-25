@@ -214,11 +214,15 @@ function Home() {
       {/* OPINIE */}
       <Section title="Opinie">
         <div className="grid sm:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <figure key={i} className="rounded-2xl border border-border bg-card p-6">
+          {[
+            ["Super wycena, super kontakt – mega szybko odpowiada.", "Karol"],
+            ["Szybko, sprawnie. Polecam.", "Konrad"],
+            ["Super telefon, idealnie działa.", "Kuba"],
+          ].map(([text, name]) => (
+            <figure key={name} className="rounded-2xl border border-border bg-card p-6">
               <p className="text-accent">★★★★★</p>
-              <blockquote className="mt-3">„[OPINIA]”</blockquote>
-              <figcaption className="mt-4 text-sm font-bold">[IMIĘ], [MIASTO]</figcaption>
+              <blockquote className="mt-3">„{text}”</blockquote>
+              <figcaption className="mt-4 text-sm font-bold">{name}</figcaption>
             </figure>
           ))}
         </div>
