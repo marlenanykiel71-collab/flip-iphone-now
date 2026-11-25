@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DziekujeRouteImport } from './routes/dziekuje'
 import { Route as PolitykaPrywatnosciRouteImport } from './routes/polityka-prywatnosci'
+import { Route as ApiPublicLeadRouteImport } from './routes/api/public/lead'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,49 @@ const PolitykaPrywatnosciRoute = PolitykaPrywatnosciRouteImport.update({
   path: '/polityka-prywatnosci',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLeadRoute = ApiPublicLeadRouteImport.update({
+  id: '/api/public/lead',
+  path: '/api/public/lead',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dziekuje': typeof DziekujeRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/api/public/lead': typeof ApiPublicLeadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dziekuje': typeof DziekujeRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/api/public/lead': typeof ApiPublicLeadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dziekuje': typeof DziekujeRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/api/public/lead': typeof ApiPublicLeadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dziekuje' | '/polityka-prywatnosci'
+  fullPaths: '/' | '/dziekuje' | '/polityka-prywatnosci' | '/api/public/lead'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dziekuje' | '/polityka-prywatnosci'
-  id: '__root__' | '/' | '/dziekuje' | '/polityka-prywatnosci'
+  to: '/' | '/dziekuje' | '/polityka-prywatnosci' | '/api/public/lead'
+  id:
+    | '__root__'
+    | '/'
+    | '/dziekuje'
+    | '/polityka-prywatnosci'
+    | '/api/public/lead'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DziekujeRoute: typeof DziekujeRoute
   PolitykaPrywatnosciRoute: typeof PolitykaPrywatnosciRoute
+  ApiPublicLeadRoute: typeof ApiPublicLeadRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +97,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PolitykaPrywatnosciRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/lead': {
+      id: '/api/public/lead'
+      path: '/api/public/lead'
+      fullPath: '/api/public/lead'
+      preLoaderRoute: typeof ApiPublicLeadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +111,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DziekujeRoute: DziekujeRoute,
   PolitykaPrywatnosciRoute: PolitykaPrywatnosciRoute,
+  ApiPublicLeadRoute: ApiPublicLeadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

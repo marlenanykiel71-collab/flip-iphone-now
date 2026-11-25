@@ -51,33 +51,36 @@ function readSource(): Record<string, string> {
   try { return JSON.parse(sessionStorage.getItem(UTM_KEY) || "{}"); } catch { return {}; }
 }
 
+/** Static FTP copy has no server, so it posts to the published Lovable app. */
+const PUBLISHED_ORIGIN = "https://flip-iphone-now.lovable.app";
+export const LEAD_TIMEOUT_MS = 15000;
+function leadEndpoint(): string {
+  const h = window.location.hostname;
+  const local = h === "localhost" || h.endsWith(".lovable.app") || h.endsWith(".lovableproject.com");
+  return `${local ? "" : PUBLISHED_ORIGIN}/api/public/lead`;
+}
+
 export async function sendLead(v: LeadInput) {
-  const phone = normalizePlPhone(v.phone)!;
   const name = v.name.trim();
   const src = readSource();
-  const now = new Date().toLocaleString("pl-PL", { timeZone: "Europe/Warsaw" });
-  const res = await fetch(`https://formsubmit.co/ajax/${LEAD_EMAIL}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      _subject: `🔥 NOWY LEAD: ${name} – ${phone}`,
-      _replyto: v.email.trim(),
-      _template: "table",
-      _captcha: "false",
-      "Imię": name,
-      "Telefon": phone,
-      "E-mail": v.email.trim(),
-      "O sobie": v.about.trim() || "—",
-      "Data i godzina": now,
-      "Źródło (utm_source)": src["utm_source"] || "—",
-      "Kampania (utm_campaign)": src["utm_campaign"] || "—",
-      "Medium (utm_medium)": src["utm_medium"] || "—",
-      "Referrer": src["referrer"] || "bezpośrednio",
-      "Zgoda na kontakt": `TAK (${now})`,
-      "Zgoda RODO": `TAK (${now})`,
-    }),
-  });
-  const data = (await res.json().catch(() => ({}))) as { success?: string | boolean };
-  if (!res.ok || String(data.success) === "false") throw new Error("send failed");
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), LEAD_TIMEOUT_MS);
+  try {
+    const res = await fetch(leadEndpoint(), {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        name, phone: v.phone, email: v.email.trim(), about: v.about.trim(),
+        consentContact: v.consentContact, consentRodo: v.consentRodo,
+        utm_source: src["utm_source"] ?? "", utm_medium: src["utm_medium"] ?? "",
+        utm_campaign: src["utm_campaign"] ?? "", referrer: src["referrer"] ?? "",
+      }),
+    });
+    const data = (await res.json().catch(() => ({}))) as { ok?: boolean };
+    if (!res.ok || data.ok !== true) throw new Error("send failed");
+  } finally {
+    clearTimeout(timer);
+  }
   sessionStorage.setItem("lead_name", name);
 }

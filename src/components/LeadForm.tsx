@@ -67,7 +67,7 @@ export function LeadForm({ id, heading = true }: { id: string; heading?: boolean
           <a href="./polityka-prywatnosci" target="_blank" rel="noopener" className="underline text-accent">Polityką prywatności</a>{" "}
           i wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z RODO (art. 6 ust. 1 lit. a) w celu obsługi zgłoszenia.*
         </Check>
-        {fail && <p className="text-sm text-destructive">Ups, nie udało się wysłać. Spróbuj ponownie za chwilę albo napisz na flipperiphone7@gmail.com.</p>}
+        {fail && <p className="text-sm text-destructive">Coś poszło nie tak – spróbuj ponownie za chwilę.</p>}
         <button type="submit" disabled={loading} className="btn-cta w-full rounded-2xl py-4 text-lg font-extrabold tracking-wide flex items-center justify-center gap-2 disabled:opacity-70">
           {loading ? <><Loader2 className="h-5 w-5 animate-spin" /> Wysyłam…</> : "ODDZWOŃCIE DO MNIE →"}
         </button>
