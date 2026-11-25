@@ -238,7 +238,7 @@ function Home() {
             <p><span className="text-foreground font-bold">Cześć, jestem Kacper.</span> Na co dzień kupuję, sprawdzam, naprawiam i sprzedaję używane iPhone'y.</p>
             <p>Uczę też innych, jak na tym zarabiać – przez mentoring, społeczność na Discordzie i produkty cyfrowe dla flipperów.</p>
             <p>Działam na Podkarpaciu i wysyłam w całą Polskę. Wszystko pokazuję na TikToku:{" "}
-              <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="text-accent font-bold underline">@kapi_flipper7</a>.</p>
+              <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="text-accent font-bold underline">@kapi_flipper</a>.</p>
           </div>
         </div>
       </Section>
@@ -276,7 +276,7 @@ function Home() {
         <div className="mx-auto max-w-5xl flex flex-col sm:flex-row flex-wrap gap-x-6 gap-y-2">
           <span className="font-bold text-foreground">Kacper</span>
           <span>Podkarpacie / cała Polska</span>
-          <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">TikTok @kapi_flipper7</a>
+          <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">TikTok @kapi_flipper</a>
           <a href={`mailto:${LEAD_EMAIL}`} className="hover:text-foreground">{LEAD_EMAIL}</a>
           <a href="./polityka-prywatnosci" className="hover:text-foreground underline">Polityka prywatności</a>
         </div>
@@ -302,7 +302,7 @@ function TrustItems() {
     <>
       <li className="flex gap-2"><ShieldCheck className="h-5 w-5 text-primary" />Każdy telefon sprawdzony punkt po punkcie</li>
       <li className="flex gap-2"><ShieldCheck className="h-5 w-5 text-primary" />Szybka gotówka za Twój telefon</li>
-      <li className="flex gap-2"><ShieldCheck className="h-5 w-5 text-primary" />Znasz mnie z TikToka @kapi_flipper7</li>
+      <li className="flex gap-2"><ShieldCheck className="h-5 w-5 text-primary" />Znasz mnie z TikToka @kapi_flipper</li>
     </>
   );
 }

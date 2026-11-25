@@ -1,5 +1,5 @@
 export const LEAD_EMAIL = "flipperiphone7@gmail.com";
-export const TIKTOK_URL = "https://www.tiktok.com/@kapi_flipper7";
+export const TIKTOK_URL = "https://www.tiktok.com/@kapi_flipper";
 export const ABOUT_MAX = 1000;
 
 /** Accepts 9 digits with optional +48/0048, spaces, dashes. Returns "+48 XXX XXX XXX" or null. */
